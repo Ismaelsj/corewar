@@ -6,7 +6,7 @@
 /*   By: isidibe- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/12 16:17:40 by isidibe-          #+#    #+#             */
-/*   Updated: 2018/02/26 11:15:57 by isidibe-         ###   ########.fr       */
+/*   Updated: 2018/03/01 10:37:11 by isidibe-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ void			ft_end_header(t_cor *cor);
 int				ft_put_char(t_cor *cor, char c);
 int				ft_put_str(t_cor *cor, char *str);
 void			ft_init(t_cor *cor);
+void			ft_in_error(int ac, char *av);
 void			ft_magic_error(t_cor *cor);
 void			ft_open_error(t_cor *cor);
 void			ft_malloc_error(t_cor *cor);

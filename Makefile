@@ -6,13 +6,13 @@
 #    By: isidibe- <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/14 13:39:55 by isidibe-          #+#    #+#              #
-#    Updated: 2018/02/26 11:38:06 by isidibe-         ###   ########.fr        #
+#    Updated: 2018/03/01 13:31:13 by isidibe-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 .PHONY: all clean fclean re
 
-SRC = $(SRCDIR)/asm.c $(SRCDIR)/ft_error.c $(SRCDIR)/ft_free.c\
+SRC = $(SRCDIR)/main.c $(SRCDIR)/ft_error.c $(SRCDIR)/ft_free.c\
 $(SRCDIR)/ft_coding_byte.c $(SRCDIR)/ft_filup_arg.c $(SRCDIR)/ft_opcode.c\
 $(SRCDIR)/ft_init.c $(SRCDIR)/ft_put_in_buff.c
 

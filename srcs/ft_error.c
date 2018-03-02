@@ -6,7 +6,7 @@
 /*   By: isidibe- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/21 10:12:34 by isidibe-          #+#    #+#             */
-/*   Updated: 2018/02/26 11:45:27 by isidibe-         ###   ########.fr       */
+/*   Updated: 2018/03/01 10:39:31 by isidibe-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,4 +42,20 @@ void		ft_magic_error(t_cor *cor)
 	ft_printf("%sERROR%s: Invalid corewar exec magic.\n", RED, RESET);
 	close(cor->fd);
 	exit(0);
+}
+
+void		ft_in_error(int ac, char *av)
+{
+	char	*str;
+
+	if (ac > 2)
+	{
+		ft_printf("%sERROR%s: To many arguments.\n", RED, RESET);
+		exit(0);
+	}
+	if ((str = ft_strrchr(av, '.')) == NULL || ft_strcmp(str, ".cor") != 0)
+	{
+		ft_printf("%sERROR%s: Invalid file.\n", RED, RESET);
+		exit(0);
+	}
 }

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   asm.c                                              :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: isidibe- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/02/12 16:22:18 by isidibe-          #+#    #+#             */
-/*   Updated: 2018/02/26 11:14:30 by isidibe-         ###   ########.fr       */
+/*   Created: 2018/03/01 13:31:00 by isidibe-          #+#    #+#             */
+/*   Updated: 2018/03/01 13:31:01 by isidibe-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,12 +93,19 @@ static void		ft_header(t_cor *cor)
 
 static int		ft_creat_file(t_cor *cor, char *str)
 {
-	char *tmp;
+	char	*tmp;
+	int		i;
 
 	tmp = NULL;
-	tmp = ft_strcdup(str, '.');
+	i = ft_strlen(str);
+	while (i > 0 && str[i] != '.')
+		i--;
+	if (i == 0)
+		tmp = ft_strdup(str);
+	else
+		tmp = ft_strndup(str, i);
 	tmp = ft_strjoin_free(tmp, ft_strdup("_dasm.s"));
-	if ((cor->fd = open(tmp, O_CREAT | O_WRONLY, S_IRWXU)) == -1)
+	if ((cor->fd = open(tmp, O_CREAT | O_WRONLY | O_TRUNC, S_IRWXU)) == -1)
 		return (-1);
 	ft_printf("Writing output to %s\n", tmp);
 	if (tmp)
@@ -115,6 +122,7 @@ int				main(int ac, char **av)
 
 	if (ac < 2)
 		return (0);
+	ft_in_error(ac, av[1]);
 	if (!(cor = (t_cor*)malloc(sizeof(t_cor))))
 		ft_malloc_error(cor);
 	ft_init(cor);
