@@ -1,54 +1,159 @@
-# **************************************************************************** #
+#******************************************************************************#
 #                                                                              #
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: isidibe- <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: jchedal- <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2017/12/14 13:39:55 by isidibe-          #+#    #+#              #
-#    Updated: 2018/03/01 13:31:13 by isidibe-         ###   ########.fr        #
+#    Created: 2018/03/06 14:30:26 by jchedal-          #+#    #+#              #
+#    Updated: 2018/03/08 15:43:36 by jchedal-         ###   ########.fr        #
 #                                                                              #
-# **************************************************************************** #
+#******************************************************************************#
 
-.PHONY: all clean fclean re
+################################## DIRECTORIES ################################# 
 
-SRC = $(SRCDIR)/main.c $(SRCDIR)/ft_error.c $(SRCDIR)/ft_free.c\
-$(SRCDIR)/ft_coding_byte.c $(SRCDIR)/ft_filup_arg.c $(SRCDIR)/ft_opcode.c\
-$(SRCDIR)/ft_init.c $(SRCDIR)/ft_put_in_buff.c
+ASM_DIR = asm_dir/
+D_ASM_DIR = d_asm_dir/
+COREWAR_DIR = corewar_dir/
 
-INCLUDES = includes
+SRCS = srcs/
+INCS = includes/
+OBJS = objs/
 
-SRCDIR = srcs
+################################### PROGRAMS ###################################
 
-OBJ = $(SRC:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
+ASM = asm
+D_ASM = d_asm
+COREWAR = corewar
 
-OBJDIR = objs
+##################################### LIBFT ####################################
 
-NAME = u_asm
+LIB = libft/
+LIBFT = $(LIB)libft.a
+LIBFLAGS = -L$(LIB) -lft
 
-LIB = libft/libft.a
+###################################### ASM #####################################
 
-CC = gcc -g
+ASM_PATH = $(ASM_DIR)$(SRCS)
+I_ASM_PATH = $(ASM_DIR)$(INCS)
+O_ASM_PATH = $(ASM_DIR)$(OBJS)
 
+ASM_SRCS = assign_instr.c\
+		   check_instr.c\
+		   error_handler.c\
+		   extract_label.c\
+		   get_file.c\
+		   get_header.c\
+		   get_instr.c\
+		   get_labels.c\
+		   get_opcode.c\
+		   get_params_size.c\
+		   get_values.c\
+		   initializing.c\
+		   main.c\
+		   parse_instr.c\
+		   print.c\
+		   utilities.c
+
+ASM_OBJS = $(addprefix $(addprefix $(ASM_DIR), $(OBJS)), $(ASM_SRCS:.c=.o)) 
+
+##################################### D_ASM ####################################
+
+D_ASM_PATH = $(D_ASM_DIR)$(SRCS)
+I_D_ASM_PATH = $(D_ASM_DIR)$(INCS)
+O_D_ASM_PATH = $(D_ASM_DIR)$(OBJS)
+
+D_ASM_SRCS = main.c\
+			ft_error.c\
+			ft_free.c\
+			ft_coding_byte.c\
+			ft_filup_arg.c\
+			ft_opcode.c\
+			ft_init.c\
+			ft_put_in_buff.c
+
+D_ASM_OBJS = $(addprefix $(addprefix $(D_ASM_DIR), $(OBJS)), $(D_ASM_SRCS:.c=.o)) 
+
+#################################### COREWAR ###################################
+
+COREWAR_PATH = $(COREWAR_DIR)$(SRCS)
+I_COREWAR_PATH = $(COREWAR_DIR)$(INCS)
+O_COREWAR_PATH = $(COREWAR_DIR)$(OBJS)
+
+COREWAR_SRCS = add_sub.c\
+			   aff.c\
+			   and_or_xor.c\
+			   argv.c\
+			   check.c\
+			   color.c\
+			   end.c\
+			   fork_lfork.c\
+			   free.c\
+			   get_champ.c\
+			   get_val.c\
+			   init.c\
+			   ld_lld.c\
+			   ldi_lldi.c\
+			   lib.c\
+			   live.c\
+			   main.c\
+			   number.c\
+			   op.c\
+			   play.c\
+			   proc.c\
+			   st.c\
+			   sti.c\
+			   usage.c\
+			   use.c\
+			   value.c\
+			   zjmp.c
+
+
+COREWAR_OBJS = $(addprefix $(addprefix $(COREWAR_DIR), $(OBJS)), $(COREWAR_SRCS:.c=.o)) 
+
+################################### COMPILING ##################################
+
+CC = gcc
 CFLAGS = -Wall -Wextra -Werror
 
-$(OBJDIR)/%.o: $(SRCDIR)/%.c
-	@mkdir -p $(OBJDIR)
-	@$(CC) -c -o $@ $< $(CFLAGS) -I $(INCLUDES)
+all: $(LIBFT) $(ASM) $(D_ASM) $(COREWAR)
 
-all: $(NAME)
+libft: $(LIBFT)
 
-$(NAME): $(OBJ)
-	@make -C ./libft
-	@$(CC) $(CFLAGS) -o $(NAME) $(OBJ) ./Libft/libft.a -I $(INCLUDES)
+$(LIBFT):
+	make -C $(LIB) > /dev/null || TRUE
+
+$(ASM): $(LIBFT) $(ASM_OBJS)
+	$(CC) $(CFLAGS) $(ASM_OBJS) -o $@ $(LIBFLAGS)
+
+$(O_ASM_PATH)%.o: $(ASM_PATH)%.c
+	mkdir -p $(O_ASM_PATH)
+	$(CC) $(CFLAGS) $(INC_FLAG) -o $@ -c $< -I $(I_ASM_PATH) -I $(LIB)$(INCS)
+
+$(D_ASM): $(LIBFT) $(D_ASM_OBJS)
+	$(CC) $(CFLAGS) $(D_ASM_OBJS) -o $@ $(LIBFLAGS)
+
+$(O_D_ASM_PATH)%.o: $(D_ASM_PATH)%.c
+	mkdir -p $(O_D_ASM_PATH)
+	$(CC) $(CFLAGS) $(INC_FLAG) -o $@ -c $< -I $(I_D_ASM_PATH) -I $(LIB)$(INCS)
+
+$(COREWAR): $(LIBFT) $(COREWAR_OBJS)
+	$(CC) $(CFLAGS) $(COREWAR_OBJS) -o $@ $(LIBFLAGS)
+
+$(O_COREWAR_PATH)%.o: $(COREWAR_PATH)%.c
+	mkdir -p $(O_COREWAR_PATH)
+	$(CC) $(CFLAGS) $(INC_FLAG) -o $@ -c $< -I $(I_COREWAR_PATH) -I $(LIB)$(INCS)
 
 clean:
-	@rm -rf $(OBJDIR)
-	@rm -rf u_asm.dSYM
-	@make clean -C ./libft
+	make clean -C $(LIB)
+	rm -rf $(O_ASM_PATH)
+	rm -rf $(O_D_ASM_PATH)
+	rm -rf $(O_COREWAR_PATH)
 
 fclean: clean
-	@rm -rf $(NAME)
-	@make fclean -C ./libft
+	make fclean -C $(LIB)
+	rm -f $(ASM)
+	rm -f $(D_ASM)
+	rm -f $(COREWAR)
 
 re: fclean all
